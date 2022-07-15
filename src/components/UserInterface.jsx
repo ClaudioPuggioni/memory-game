@@ -69,7 +69,7 @@ function UserInterface() {
           clearInterval(timer);
           setTimeout(() => {
             setWon(true);
-          }, 900);
+          }, 1000);
         }
         setMatrixState(tempMatrix);
         setScore((prevScore) => prevScore + 1);
