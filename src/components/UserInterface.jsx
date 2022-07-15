@@ -67,7 +67,9 @@ function UserInterface() {
         tempMatrix[second[0]][second[1]] = 0;
         if (tempMatrix.flat().reduce((acc, cur) => acc + cur) === 0) {
           clearInterval(timer);
-          setWon(true);
+          setTimeout(() => {
+            setWon(true);
+          }, 900);
         }
         setMatrixState(tempMatrix);
         setScore((prevScore) => prevScore + 1);
@@ -109,17 +111,18 @@ function UserInterface() {
     <div id="container">
       <div id="gameTitle">Memory Game</div>
       <Dashboard score={score} moves={moves} time={time} winBtn={restart} />
-      <div id="cardContainer" style={{ background: !won ? "linear-gradient(135deg, #60dd8e, #188a8d)" : "transparent" }}>
+      <div id="winner" style={{ opacity: !won ? "0" : "100%" }}>{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
+      <div id="cardContainer" className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)" }}>
         {currMatrix === null && !won ? (
           "Loading"
         ) : !won ? (
           currMatrix.map((row, rIdx) => {
             return row.map((col, cIdx) => {
-              return <Card inputDeg={matrixState[rIdx][cIdx] === 0 ? "180" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "180" : "0"} identifier={`r${rIdx}c${cIdx}`} fruitName={currMatrix[rIdx][cIdx]} handleClick={userSelection} />;
+              return <Card inputDeg={matrixState[rIdx][cIdx] === 0 ? "180" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "180" : "0"} identifier={`r${rIdx}c${cIdx}`} fruitName={currMatrix[rIdx][cIdx]} handleClick={userSelection} bgColor={matrixState[rIdx][cIdx] === 0 ? "#60dd8e" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "#ebdd83" : "#60dd8e"} />;
             });
           })
         ) : (
-          <div id="winner">{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
+          <></>
         )}
       </div>
     </div>
