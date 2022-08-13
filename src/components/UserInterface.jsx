@@ -1,10 +1,11 @@
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, createRef } from "react";
 import Dashboard from "./Dashboard";
 import Card from "./Card";
 
 let prevChoice;
 let timer;
 let closedMatrix = new Array(4).fill(null).map((ele) => new Array(4).fill(1));
+
 function UserInterface() {
   let [currMatrix, setCurrMatrix] = useState(null);
   let [matrixState, setMatrixState] = useState(null);
@@ -14,6 +15,13 @@ function UserInterface() {
   let [time, setTime] = useState(0);
   let [won, setWon] = useState(false);
   let firstRender = useRef(true);
+  let cardBox = createRef(null);
+  let [maxD, setMaxD] = useState("470px");
+
+  useEffect(() => {
+    if (cardBox.current) setMaxD(`${cardBox.current.getBoundingClientRect().width}px`);
+    // eslint-disable-next-line
+  }, [cardBox.current ? cardBox.current.getBoundingClientRect().width : cardBox]);
 
   function generateMatrix() {
     let numsArr = [
@@ -110,9 +118,10 @@ function UserInterface() {
   return (
     <div id="container">
       <div id="gameTitle">Memory Game</div>
+      {/* {console.log(cardBox.current)} */}
       <Dashboard score={score} moves={moves} time={time} winBtn={restart} />
       <div id="winner" style={{ opacity: !won ? "0" : "100%" }}>{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
-      <div id="cardContainer" className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)" }}>
+      <div id="cardContainer" ref={cardBox} className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)", maxHeight: maxD, maxWidth: maxD }}>
         {currMatrix === null && !won ? (
           "Loading"
         ) : !won ? (
