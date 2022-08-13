@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, createRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, createRef, useCallback } from "react";
 import Dashboard from "./Dashboard";
 import Card from "./Card";
 
@@ -16,12 +16,23 @@ function UserInterface() {
   let [won, setWon] = useState(false);
   let firstRender = useRef(true);
   let cardBox = createRef(null);
-  let [maxD, setMaxD] = useState("470px");
+  let [maxWidth, setMaxWidth] = useState(470);
+
+  // useEffect(() => {
+  //   if (cardBox.current) setMaxWidth(`${cardBox.current.getBoundingClientRect().width}`);
+  //   // eslint-disable-next-line
+  // }, [cardBox.current ? cardBox.current.getBoundingClientRect().width : cardBox]);
+  const handleResize = useCallback(() => {
+    window.innerWidth < 470 ? setMaxWidth(window.innerWidth) : setMaxWidth(470);
+  }, []);
 
   useEffect(() => {
-    if (cardBox.current) setMaxD(`${cardBox.current.getBoundingClientRect().width}px`);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
     // eslint-disable-next-line
-  }, [cardBox.current ? cardBox.current.getBoundingClientRect().width : cardBox]);
+  }, [handleResize]);
 
   function generateMatrix() {
     let numsArr = [
@@ -120,14 +131,14 @@ function UserInterface() {
       <div id="gameTitle">Memory Game</div>
       {/* {console.log(cardBox.current)} */}
       <Dashboard score={score} moves={moves} time={time} winBtn={restart} />
-      <div id="winner" style={{ opacity: !won ? "0" : "100%" }}>{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
-      <div id="cardContainer" ref={cardBox} className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)", maxHeight: maxD, maxWidth: maxD }}>
+      <div id="winner" style={{ opacity: !won ? "0" : "100%", zIndex: !won ? "-9" : "9" }}>{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
+      <div id="cardContainer" ref={cardBox} className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)", maxHeight: `${maxWidth}px`, maxWidth: `${maxWidth}px` }}>
         {currMatrix === null && !won ? (
           "Loading"
         ) : !won ? (
           currMatrix.map((row, rIdx) => {
             return row.map((col, cIdx) => {
-              return <Card inputDeg={matrixState[rIdx][cIdx] === 0 ? "180" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "180" : "0"} identifier={`r${rIdx}c${cIdx}`} fruitName={currMatrix[rIdx][cIdx]} handleClick={userSelection} bgColor={matrixState[rIdx][cIdx] === 0 ? "#60dd8e" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "#ebdd83" : "#60dd8e"} />;
+              return <Card key={`card${cIdx}`} inputDeg={matrixState[rIdx][cIdx] === 0 ? "180" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "180" : "0"} identifier={`r${rIdx}c${cIdx}`} fruitName={currMatrix[rIdx][cIdx]} handleClick={userSelection} bgColor={matrixState[rIdx][cIdx] === 0 ? "#60dd8e" : currSelected.includes(`r${rIdx}c${cIdx}`) ? "#ebdd83" : "#60dd8e"} />;
             });
           })
         ) : (

@@ -27,12 +27,26 @@
 #dashboard {
   position: relative;
   height: 80px;
-  width: 70%;
+  width: 100%;
+  min-width: 370px;
+  max-width: 600px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 21px;
   font-family: "Sansita Swashed";
+
+  user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+#dashboardInfo {
+  display: flex;
+  align-items: center;
 }
 #timeLeftLabel {
   position: absolute;
@@ -43,13 +57,13 @@
 }
 #movesMadeLabel {
   position: absolute;
-  left: 31%;
+  left: 25%;
   display: flex;
   align-items: center;
 }
 #currentScoreLabel {
   position: absolute;
-  left: 60%;
+  left: 50%;
   display: flex;
   align-items: center;
 }
@@ -64,7 +78,7 @@
 
 #restartBtn {
   position: absolute;
-  right: 0;
+  right: 10px;
   padding: 3px 12px;
   padding-right: 13px;
   padding-bottom: 8px;
@@ -75,14 +89,13 @@
   background-color: #1f6d3b;
   font-size: 21px;
   font-family: "Sansita Swashed";
+  cursor: pointer;
 }
 
 #cardContainer {
   position: relative;
   height: 100%;
-  /* max-height: 470px; */
   width: 100%;
-  /* max-width: 470px; */
 
   display: flex;
   flex-wrap: wrap;
@@ -93,10 +106,12 @@
   overflow: hidden;
 
   user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
-  -o-user-select: none;
+  -webkit-touch-callout: none;
 }
 
 .card {
@@ -109,10 +124,12 @@
   perspective: 1000px;
 
   user-select: none;
+  -o-user-select: none;
+  -ms-user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
-  -o-user-select: none;
+  -webkit-touch-callout: none;
 }
 .innerCard {
   position: relative;
