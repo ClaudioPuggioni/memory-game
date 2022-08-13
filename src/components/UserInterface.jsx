@@ -7,15 +7,15 @@ let timer;
 let closedMatrix = new Array(4).fill(null).map((ele) => new Array(4).fill(1));
 
 function UserInterface() {
-  let [currMatrix, setCurrMatrix] = useState(null);
-  let [matrixState, setMatrixState] = useState(null);
-  let [currSelected, setCurrSelected] = useState([]);
-  let [score, setScore] = useState(0);
-  let [moves, setMoves] = useState(0);
-  let [time, setTime] = useState(0);
-  let [won, setWon] = useState(false);
-  let firstRender = useRef(true);
-  let [maxWidth, setMaxWidth] = useState(470);
+  const [currMatrix, setCurrMatrix] = useState(null);
+  const [matrixState, setMatrixState] = useState(null);
+  const [currSelected, setCurrSelected] = useState([]);
+  const [score, setScore] = useState(0);
+  const [moves, setMoves] = useState(0);
+  const [time, setTime] = useState(0);
+  const [won, setWon] = useState(false);
+  const firstRender = useRef(true);
+  const [maxWidth, setMaxWidth] = useState(470);
   const [countEnabled, setCountEnabled] = useState(true);
 
   const handleResize = useCallback(() => {
@@ -90,7 +90,7 @@ function UserInterface() {
         setScore((prevScore) => prevScore + 1);
       }
       setTimeout(() => {
-        setCurrSelected((prevState) => []);
+        setCurrSelected(() => []);
         prevChoice = null;
       }, 1100);
     }
@@ -103,13 +103,14 @@ function UserInterface() {
       return;
     } else {
       timer = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
+        if (countEnabled) setTime((prevTime) => prevTime + 1);
       }, 1000);
     }
 
     return () => {
       clearInterval(timer);
     };
+    // eslint-disable-next-line
   }, [time]);
 
   function restart() {
