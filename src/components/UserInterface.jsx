@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useRef, createRef, useCallback } from "react";
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
 import Dashboard from "./Dashboard";
 import Card from "./Card";
 
@@ -15,13 +15,9 @@ function UserInterface() {
   let [time, setTime] = useState(0);
   let [won, setWon] = useState(false);
   let firstRender = useRef(true);
-  let cardBox = createRef(null);
   let [maxWidth, setMaxWidth] = useState(470);
+  const [countEnabled, setCountEnabled] = useState(true);
 
-  // useEffect(() => {
-  //   if (cardBox.current) setMaxWidth(`${cardBox.current.getBoundingClientRect().width}`);
-  //   // eslint-disable-next-line
-  // }, [cardBox.current ? cardBox.current.getBoundingClientRect().width : cardBox]);
   const handleResize = useCallback(() => {
     window.innerWidth < 470 ? setMaxWidth(window.innerWidth) : setMaxWidth(470);
   }, []);
@@ -31,7 +27,6 @@ function UserInterface() {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-    // eslint-disable-next-line
   }, [handleResize]);
 
   function generateMatrix() {
@@ -88,6 +83,7 @@ function UserInterface() {
           clearInterval(timer);
           setTimeout(() => {
             setWon(true);
+            setCountEnabled(false);
           }, 1000);
         }
         setMatrixState(tempMatrix);
@@ -124,15 +120,15 @@ function UserInterface() {
     firstRender.current = true;
     setMatrixState(JSON.parse(JSON.stringify(closedMatrix)));
     setCurrMatrix(generateMatrix());
+    setCountEnabled(true);
   }
 
   return (
     <div id="container">
       <div id="gameTitle">Memory Game</div>
-      {/* {console.log(cardBox.current)} */}
       <Dashboard score={score} moves={moves} time={time} winBtn={restart} />
       <div id="winner" style={{ opacity: !won ? "0" : "100%", zIndex: !won ? "-9" : "9" }}>{`Congratulations! You won in ${moves} moves! You took ${time} seconds!`}</div>
-      <div id="cardContainer" ref={cardBox} className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)", maxHeight: `${maxWidth}px`, maxWidth: `${maxWidth}px` }}>
+      <div id="cardContainer" className={!won ? "" : "vanish"} style={{ background: "linear-gradient(135deg, #60dd8e, #188a8d)", maxHeight: `${maxWidth}px`, maxWidth: `${maxWidth}px` }}>
         {currMatrix === null && !won ? (
           "Loading"
         ) : !won ? (

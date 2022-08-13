@@ -130,6 +130,8 @@
   -khtml-user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
+
+  cursor: pointer;
 }
 .innerCard {
   position: relative;
@@ -168,7 +170,7 @@
 
 #winner {
   position: absolute;
-  top: 35%;
+  top: 44%;
   font-size: 25px;
   font-family: Teko;
 }
